@@ -310,3 +310,10 @@ footer{border-top:1px solid #ffffff12;background:#080b13;padding-top:28px;paddin
  .modal-box{border-radius:18px}
 }
 @media(prefers-reduced-motion:reduce){.art-emoji,.featured-art-placeholder span{animation:none}}
+
+/* Subtle entrance for published winner rows; no heavy animation loops */
+@keyframes winnerSlideIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.winner-row{animation:winnerSlideIn .32s ease-out both}
+.winner-row:nth-child(2){animation-delay:.035s}.winner-row:nth-child(3){animation-delay:.07s}.winner-row:nth-child(4){animation-delay:.105s}
+.winner-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid #75e2b02a}
+@media(prefers-reduced-motion:reduce){.winner-row{animation:none}}
