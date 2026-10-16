@@ -1,12 +1,95 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Minecraft Bedrock giveaways by Yazmiyor. One nickname, one entry."><title>YAZMIYOR • The Hive Giveaways</title><link rel="icon" href="assets/prize-1.png"><link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
-<body><div class="bg-grid"></div>
-<header class="nav"><a class="brand" href="#"><span class="cube">◆</span> YAZMIYOR <b>GIVEAWAYS</b></a><nav><a href="#giveaways" data-i18n="navGiveaways">Giveaways</a><a href="#how" data-i18n="navHow">How it works</a><a href="admin.html" class="admin-link">Admin</a></nav><div class="lang"><button id="enBtn">EN</button><button id="trBtn">TR</button></div></header>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="The Hive community giveaways for Minecraft Bedrock players. One nickname, one entry.">
+<meta name="theme-color" content="#0b0d10">
+<title>THE HIVE • Community Giveaways</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="hive-glow hive-glow-a"></div>
+<div class="hive-glow hive-glow-b"></div>
+
+<header class="nav">
+  <a class="brand" href="#">
+    <span class="hive-mark"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    <span>THE HIVE <b>GIVEAWAYS</b></span>
+  </a>
+  <nav>
+    <a href="#giveaways" data-i18n="navGiveaways">Giveaways</a>
+    <a href="#how" data-i18n="navHow">How it works</a>
+    <a href="admin.html" class="admin-link" data-i18n="navAdmin">Admin</a>
+  </nav>
+  <div class="lang"><button id="enBtn">EN</button><button id="trBtn">TR</button></div>
+</header>
+
 <main>
-<section class="hero"><div class="hero-copy"><div class="eyebrow">MINECRAFT BEDROCK • COMMUNITY EVENTS</div><h1>ENTER.<br>PLAY.<br><span>WIN.</span></h1><p data-i18n="heroText">Community giveaways for Minecraft Bedrock players. One nickname, one entry.</p><div class="hero-actions"><a class="cta" href="#giveaways"><span data-i18n="heroCta">VIEW GIVEAWAYS</span><span>→</span></a><a class="ghost-cta" href="#how">HOW IT WORKS <span>↓</span></a></div><div class="hero-proof"><span><b>01</b> ONE ENTRY</span><span><b>02</b> FAIR DRAW</span><span><b>03</b> PUBLIC RESULT</span></div></div>
-<div class="hero-card"><div class="scan"></div><div class="hero-badge">BEDROCK</div><div class="hero-card-top">YAZMIYOR / EVENT 2026</div><div class="hero-code">HIVE<br><strong>GIVEAWAY</strong></div><div class="hero-card-foot"><span>COMMUNITY DROP</span><span>LIVE</span></div></div></section>
-<section class="feature-strip"><div><b>FAIR ENTRY</b><span>One nickname per giveaway</span></div><div><b>NO SPAM</b><span>Device + nickname protection</span></div><div><b>TRACKABLE</b><span>Results managed by admin</span></div></section>
-<section id="giveaways" class="section"><div class="section-head"><div><div class="eyebrow">LIVE EVENTS</div><h2 data-i18n="liveTitle">Active Giveaways</h2></div><div id="count" class="count">—</div></div><div id="cards" class="cards"><div class="loading">Loading giveaways…</div></div></section>
-<section id="how" class="section how"><div class="eyebrow">SIMPLE BY DESIGN</div><h2 data-i18n="howTitle">How it works</h2><div class="steps"><div><b>01</b><h3 data-i18n="step1h">Choose a giveaway</h3><p data-i18n="step1p">Pick an active event and read its requirements.</p></div><div><b>02</b><h3 data-i18n="step2h">Enter your nickname</h3><p data-i18n="step2p">Use your exact Minecraft Bedrock in-game name and leave one way to contact you.</p></div><div><b>03</b><h3 data-i18n="step3h">Wait for the draw</h3><p data-i18n="step3p">When the event ends, eligible entries are drawn and the winner is announced.</p></div></div></section>
-<section class="final-cta"><div><div class="eyebrow">READY?</div><h2>YOUR NEXT WIN<br>STARTS HERE.</h2></div><a class="cta" href="#giveaways">VIEW LIVE EVENTS →</a></section>
-</main><footer><span>© 2026 Yazmiyor Giveaways</span><span><a href="https://www.youtube.com/@IamNotYazmiyor" target="_blank" rel="noopener">YouTube</a></span></footer>
-<div id="modal" class="modal hidden"><div class="modal-box"><button class="close" id="close">×</button><div id="modalContent"></div></div></div><div id="toast"></div><script src="app.js?v=4"></script></body></html>
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">MINECRAFT BEDROCK • THE HIVE COMMUNITY</div>
+    <h1>THE HIVE<br><span>GIVEAWAYS.</span></h1>
+    <p data-i18n="heroText">Community giveaways for Minecraft Bedrock players. Pick an event, enter once and follow the result.</p>
+    <div class="hero-actions">
+      <a class="cta" href="#giveaways"><span data-i18n="heroCta">VIEW GIVEAWAYS</span><span>→</span></a>
+      <a class="ghost-cta" href="#how"><span data-i18n="heroHow">HOW IT WORKS</span><span>↓</span></a>
+    </div>
+    <div class="hero-note"><span class="dot"></span><span data-i18n="heroNote">One nickname per giveaway • Fair community draws</span></div>
+  </div>
+
+  <div class="hive-visual" aria-hidden="true">
+    <div class="visual-label">THE HIVE / 2026</div>
+    <div class="hex-cluster">
+      <span class="hex h1"></span><span class="hex h2"></span><span class="hex h3"></span>
+      <span class="hex h4"></span><span class="hex h5"></span><span class="hex h6"></span>
+      <span class="hex h7"></span><span class="hex h8"></span><span class="hex h9"></span>
+      <span class="hex h10"></span><span class="hex h11"></span><span class="hex h12"></span>
+    </div>
+    <div class="visual-title">HIVE<br><strong>DROP</strong></div>
+    <div class="visual-foot"><span>COMMUNITY EVENT</span><span>● LIVE</span></div>
+  </div>
+</section>
+
+<section class="stats-strip" aria-label="Community statistics">
+  <div class="stat-item"><span class="stat-icon">◆</span><div><strong id="statEntries">—</strong><span data-i18n="statEntries">TOTAL ENTRIES</span></div></div>
+  <div class="stat-item"><span class="stat-icon">◇</span><div><strong id="statLive">—</strong><span data-i18n="statLive">LIVE GIVEAWAYS</span></div></div>
+  <div class="stat-item"><span class="stat-icon">✓</span><div><strong id="statCompleted">—</strong><span data-i18n="statCompleted">COMPLETED</span></div></div>
+</section>
+
+<section id="giveaways" class="section">
+  <div class="section-head">
+    <div><div class="eyebrow">COMMUNITY DROPS</div><h2 data-i18n="liveTitle">Live Giveaways</h2></div>
+    <div id="count" class="count">—</div>
+  </div>
+  <div id="cards" class="cards"><div class="loading">Loading giveaways…</div></div>
+</section>
+
+<section id="how" class="section how">
+  <div class="eyebrow">SIMPLE & FAIR</div>
+  <h2 data-i18n="howTitle">How it works</h2>
+  <div class="steps">
+    <div><b>01</b><h3 data-i18n="step1h">Choose a giveaway</h3><p data-i18n="step1p">Open an active event and check the prize, schedule and requirements.</p></div>
+    <div><b>02</b><h3 data-i18n="step2h">Enter once</h3><p data-i18n="step2p">Use your exact Minecraft Bedrock nickname and one contact method.</p></div>
+    <div><b>03</b><h3 data-i18n="step3h">Watch the result</h3><p data-i18n="step3p">When the event ends, eligible entries are drawn and the result is published.</p></div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div><div class="eyebrow">THE HIVE COMMUNITY</div><h2 data-i18n="finalTitle">YOUR NEXT<br><span>DROP AWAITS.</span></h2></div>
+  <a class="cta" href="#giveaways"><span data-i18n="finalCta">VIEW LIVE EVENTS</span> →</a>
+</section>
+</main>
+
+<footer>
+  <span>© 2026 The Hive Community Giveaways</span>
+  <span><a href="https://www.youtube.com/@IamNotYazmiyor" target="_blank" rel="noopener">YouTube</a> · Community project</span>
+</footer>
+
+<div id="modal" class="modal hidden"><div class="modal-box"><button class="close" id="close">×</button><div id="modalContent"></div></div></div>
+<div id="toast"></div>
+<script src="app.js?v=5"></script>
+</body>
+</html>
