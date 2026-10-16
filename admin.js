@@ -92,6 +92,6 @@ document.addEventListener("DOMContentLoaded",()=>{
  $("newBtn").onclick=()=>openEditor();$("refreshBtn").onclick=()=>load();$("modalClose").onclick=closeEditor;$("cancelForm").onclick=closeEditor;$("addReq").onclick=()=>addReqRow();$("giveawayForm").onsubmit=saveGiveaway;
  $("title").oninput=()=>{if(!$("gid").value&&!$("slug").dataset.touched)$("slug").value=slugify($("title").value)};$("slug").oninput=()=>{$("slug").dataset.touched="1"};
  document.addEventListener("click",e=>{const id=e.target.dataset.id;if(!id)return;if(e.target.classList.contains("edit"))openEditor(state.giveaways.find(g=>g.id===id));if(e.target.classList.contains("archive"))archive(id);if(e.target.classList.contains("draw"))draw(id);if(e.target.classList.contains("dq"))entryStatus(id,"disqualified");if(e.target.classList.contains("valid"))entryStatus(id,"valid")});
- $("enBtn").onclick=()=>{adminLang="en";localStorage.setItem("admin_lang","en");applyAdminLanguage();render()};$("trBtn").onclick=()=>{adminLang="tr";localStorage.setItem("admin_lang","tr");applyAdminLanguage();render()};
- applyAdminLanguage();if(accessToken)load();
+ $("enBtn").onclick=()=>{adminLang="en";localStorage.setItem("admin_lang","en");render()};$("trBtn").onclick=()=>{adminLang="tr";localStorage.setItem("admin_lang","tr");render()};
+ applyAdminLanguage();applyAdminLanguage();if(accessToken)load();
 });
