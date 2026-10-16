@@ -1,133 +1,44 @@
 const SUPABASE_URL="https://adgfwvqndgwdllnjtbcc.supabase.co";
 const SUPABASE_KEY="sb_publishable_ZgCi1NpFMv9KcDGdZlEfdg_0aHBMs7J";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-
-let lang=localStorage.getItem("lang")||"en";
+let lang=localStorage.getItem("lang")||"en", feed={giveaways:[],recent_winners:[]},activeFilter="all";
 const T={
- en:{
-  navGiveaways:"Giveaways",navHow:"How it works",navAdmin:"Admin",
-  heroText:"Community giveaways for Minecraft Bedrock players. Pick an event, enter once and follow the result.",
-  heroCta:"VIEW GIVEAWAYS",heroHow:"HOW IT WORKS",heroNote:"One nickname per giveaway • Fair community draws",
-  statEntries:"TOTAL ENTRIES",statLive:"LIVE GIVEAWAYS",statCompleted:"COMPLETED",
-  liveTitle:"Live Giveaways",howTitle:"How it works",
-  step1h:"Choose a giveaway",step1p:"Open an active event and check the prize, schedule and requirements.",
-  step2h:"Enter once",step2p:"Use your exact Minecraft Bedrock nickname and one contact method.",
-  step3h:"Watch the result",step3p:"When the event ends, eligible entries are drawn and the result is published.",
-  finalTitle:"YOUR NEXT<br><span>DROP AWAITS.</span>",finalCta:"VIEW LIVE EVENTS"
- },
- tr:{
-  navGiveaways:"Çekilişler",navHow:"Nasıl çalışır",navAdmin:"Yönetim",
-  heroText:"Minecraft Bedrock oyuncuları için topluluk çekilişleri. Bir etkinlik seç, bir kez katıl ve sonucu takip et.",
-  heroCta:"ÇEKİLİŞLERİ GÖR",heroHow:"NASIL ÇALIŞIR",heroNote:"Her çekilişte bir nick • Adil topluluk çekilişleri",
-  statEntries:"TOPLAM KATILIM",statLive:"AKTİF ÇEKİLİŞ",statCompleted:"TAMAMLANAN",
-  liveTitle:"Canlı Çekilişler",howTitle:"Nasıl çalışır",
-  step1h:"Bir çekiliş seç",step1p:"Aktif etkinliği aç ve ödülü, zamanı ve katılım şartlarını kontrol et.",
-  step2h:"Bir kez katıl",step2p:"Minecraft Bedrock nickini doğru yaz ve bir iletişim yöntemi bırak.",
-  step3h:"Sonucu takip et",step3p:"Süre bitince geçerli katılımlar arasından kazanan belirlenir ve sonuç yayınlanır.",
-  finalTitle:"SIRADAKİ<br><span>ÖDÜL SENİ BEKLİYOR.</span>",finalCta:"CANLI ETKİNLİKLER"
- }
+ en:{navGiveaways:"Giveaways",navWinners:"Winners",navHow:"How it works",navAdmin:"Admin",heroText:"Community giveaways for Minecraft Bedrock players. Join an event, enter once and follow the result.",heroCta:"VIEW GIVEAWAYS",heroHow:"HOW IT WORKS",heroNote:"One nickname per giveaway · Community-run draws",statEntries:"TOTAL ENTRIES",statLive:"LIVE GIVEAWAYS",statCompleted:"COMPLETED",statWinners:"WINNERS DRAWN",liveEyebrow:"COMMUNITY DROPS",liveTitle:"Live Giveaways",liveSub:"Find your next community drop.",winnerEyebrow:"THE COMMUNITY WALL",winnerTitle:"Recent Winners",winnerSub:"Results from completed, published giveaways.",allResults:"ALL RESULTS →",pastEyebrow:"THE ARCHIVE",pastTitle:"Past Giveaways",pastSub:"Every completed event and its recorded result.",filterAll:"All",filterMinecoins:"Minecoins",filterRanks:"Ranks",filterCosmetics:"Cosmetics",filterOther:"Other",howTitle:"How it works",step1h:"Choose a giveaway",step1p:"Check the prize, schedule and requirements.",step2h:"Enter once",step2p:"Use your exact Minecraft Bedrock nickname and one contact method.",step3h:"Follow the result",step3p:"When the event ends, the published result stays available in the archive.",finalTitle:"YOUR NEXT<br><span>DROP AWAITS.</span>",finalCta:"VIEW LIVE EVENTS",footerDesc:"A community-run project for Minecraft Bedrock players.",disclaimer:"Not affiliated with or endorsed by The Hive.",noLive:"No live giveaways right now.",noPast:"No past giveaways published yet.",noWinners:"No winners published yet.",entries:"ENTRIES",ends:"ENDS IN",ended:"COMPLETED",live:"LIVE",winner:"Winner",winners:"Winners",prize:"PRIZE",entry:"ENTER GIVEAWAY",viewResult:"VIEW RESULT",details:"GIVEAWAY DETAILS",drawDate:"DRAW DATE",entryCount:"VALID ENTRIES",requirements:"Requirements",share:"COPY SHARE LINK",close:"CLOSE",copied:"Link copied",copyFail:"Copy the URL from your browser.",enterOnce:"One entry per Minecraft nickname and device.",countdownEnded:"Entry period ended",days:"d",hours:"h",minutes:"m",seconds:"s",unknownWinner:"Winner not published",contactMethod:"Contact method",contactInfo:"Contact information",minecraftNick:"Minecraft username",accept:"I have read and accept the giveaway requirements.",submit:"SUBMIT ENTRY",submitting:"SUBMITTING…",entryReceived:"Entry received!",entrySuccess:"Your entry was recorded. Check back for the published result.",choose:"Choose a category",invalidDate:"Date unavailable"},
+ tr:{navGiveaways:"Çekilişler",navWinners:"Kazananlar",navHow:"Nasıl çalışır",navAdmin:"Yönetim",heroText:"Minecraft Bedrock oyuncuları için topluluk çekilişleri. Bir etkinliğe katıl, tek katılım hakkını kullan ve sonucu takip et.",heroCta:"ÇEKİLİŞLERİ GÖR",heroHow:"NASIL ÇALIŞIR",heroNote:"Her çekilişte bir nick · Topluluk çekilişleri",statEntries:"TOPLAM KATILIM",statLive:"AKTİF ÇEKİLİŞ",statCompleted:"TAMAMLANAN",statWinners:"BELİRLENEN KAZANAN",liveEyebrow:"TOPLULUK ÖDÜLLERİ",liveTitle:"Aktif Çekilişler",liveSub:"Sıradaki topluluk ödülünü keşfet.",winnerEyebrow:"TOPLULUK PANOSU",winnerTitle:"Son Kazananlar",winnerSub:"Tamamlanan ve yayınlanmış çekiliş sonuçları.",allResults:"TÜM SONUÇLAR →",pastEyebrow:"ARŞİV",pastTitle:"Geçmiş Çekilişler",pastSub:"Tamamlanan etkinlikler ve kayıtlı sonuçları.",filterAll:"Tümü",filterMinecoins:"Minecoins",filterRanks:"Rütbeler",filterCosmetics:"Kozmetikler",filterOther:"Diğer",howTitle:"Nasıl çalışır",step1h:"Bir çekiliş seç",step1p:"Ödülü, tarihleri ve katılım şartlarını kontrol et.",step2h:"Bir kez katıl",step2p:"Minecraft Bedrock nickini doğru yaz ve bir iletişim yöntemi bırak.",step3h:"Sonucu takip et",step3p:"Etkinlik bittiğinde yayınlanan sonuç arşivde kalır.",finalTitle:"SIRADAKİ<br><span>ÖDÜL SENİ BEKLİYOR.</span>",finalCta:"AKTİF ÇEKİLİŞLER",footerDesc:"Minecraft Bedrock oyuncuları için topluluk projesi.",disclaimer:"The Hive ile bağlantılı değildir ve The Hive tarafından desteklenmemektedir.",noLive:"Şu anda aktif çekiliş yok.",noPast:"Henüz yayınlanmış geçmiş çekiliş yok.",noWinners:"Henüz kazanan yayınlanmadı.",entries:"KATILIM",ends:"KALAN SÜRE",ended:"TAMAMLANDI",live:"AKTİF",winner:"Kazanan",winners:"Kazananlar",prize:"ÖDÜL",entry:"ÇEKİLİŞE KATIL",viewResult:"SONUCU GÖR",details:"ÇEKİLİŞ DETAYI",drawDate:"SONUÇ TARİHİ",entryCount:"GEÇERLİ KATILIM",requirements:"Şartlar",share:"PAYLAŞIM LİNKİNİ KOPYALA",close:"KAPAT",copied:"Bağlantı kopyalandı",copyFail:"Bağlantıyı tarayıcı adresinden kopyala.",enterOnce:"Her Minecraft nicki ve cihaz için tek katılım.",countdownEnded:"Katılım süresi sona erdi",days:"g",hours:"sa",minutes:"dk",seconds:"sn",unknownWinner:"Kazanan yayınlanmadı",contactMethod:"İletişim yöntemi",contactInfo:"İletişim bilgisi",minecraftNick:"Minecraft nicki",accept:"Çekiliş şartlarını okudum ve kabul ediyorum.",submit:"KATILIMI GÖNDER",submitting:"GÖNDERİLİYOR…",entryReceived:"Katılımın alındı!",entrySuccess:"Katılımın kaydedildi. Yayınlanan sonucu buradan takip edebilirsin.",choose:"Kategori seç",invalidDate:"Tarih mevcut değil"}
 };
-
-function t(k){return T[lang][k]||k}
-function applyLang(){
- document.querySelectorAll("[data-i18n]").forEach(e=>e.innerHTML=t(e.dataset.i18n));
- document.getElementById("enBtn").classList.toggle("active",lang==="en");
- document.getElementById("trBtn").classList.toggle("active",lang==="tr");
- document.documentElement.lang=lang;
-}
-document.getElementById("enBtn").onclick=()=>{lang="en";localStorage.setItem("lang",lang);applyLang();load()};
-document.getElementById("trBtn").onclick=()=>{lang="tr";localStorage.setItem("lang",lang);applyLang();load()};
-
-const deviceId=(()=>{
- let x=localStorage.getItem("yg_device");
- if(!x){x=crypto.randomUUID()+"-"+crypto.randomUUID();localStorage.setItem("yg_device",x)}
- return x
-})();
-
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function fmt(d){return new Intl.DateTimeFormat(lang==="tr"?"tr-TR":"en-US",{dateStyle:"medium",timeStyle:"short"}).format(new Date(d))}
-
-async function loadStats(){
- const {data,error}=await sb.rpc("get_public_giveaway_stats");
- if(error||!data)return;
- document.getElementById("statEntries").textContent=Number(data.total_entries||0).toLocaleString(lang==="tr"?"tr-TR":"en-US");
- document.getElementById("statLive").textContent=Number(data.active_giveaways||0).toLocaleString(lang==="tr"?"tr-TR":"en-US");
- document.getElementById("statCompleted").textContent=Number(data.completed_giveaways||0).toLocaleString(lang==="tr"?"tr-TR":"en-US");
-}
-
-async function load(){
- const {data,error}=await sb.from("giveaways").select("*").eq("published",true).in("status",["live","ended"]).order("ends_at",{ascending:true});
- const cards=document.getElementById("cards");
- if(error){cards.innerHTML='<div class="empty">'+(lang==="tr"?"Çekilişler yüklenemedi.":"Unable to load giveaways.")+'</div>';return}
- const live=data.filter(g=>g.status==="live"&&new Date(g.ends_at)>new Date()).length;
- document.getElementById("count").textContent=lang==="tr"?live+" aktif etkinlik":live+" live event"+(live===1?"":"s");
- if(!data.length){cards.innerHTML='<div class="empty">'+(lang==="tr"?"Şu anda yayınlanmış çekiliş yok.":"No published giveaways right now.")+'</div>';return}
- cards.innerHTML=data.map(g=>{
-  const req=Array.isArray(g.requirements)?g.requirements:[];
-  const ended=g.status==="ended"||new Date(g.ends_at)<=new Date();
-  return '<article class="card">'+
-   '<div class="card-img">'+(g.prize_image_url?'<img src="'+esc(g.prize_image_url)+'" alt="'+esc(g.prize_name)+'">':'<div class="hero-code">'+esc(g.prize_name)+'</div>')+'</div>'+
-   '<div class="card-body">'+
-   '<span class="tag '+(ended?"ended":"")+'">'+(ended?(lang==="tr"?"BİTTİ":"ENDED"):(lang==="tr"?"AKTİF":"LIVE"))+'</span>'+
-   '<h3>'+esc(g.title)+'</h3><p>'+esc(g.description)+'</p>'+
-   '<div class="meta"><span>'+(lang==="tr"?"ÖDÜL":"PRIZE")+'<br><strong>'+esc(g.prize_name)+'</strong></span><span>'+(ended?(lang==="tr"?"BİTTİ":"ENDED"):(lang==="tr"?"BİTİŞ":"ENDS"))+'<br><strong>'+fmt(g.ends_at)+'</strong></span></div>'+
-   (ended?"":'<button class="enter" onclick="openEntry(\''+g.id+'\')">'+(lang==="tr"?"KATIL":"ENTER")+' →</button>')+
-   '</div></article>'
- }).join("");
-}
-
-window.openEntry=async id=>{
- const {data:g}=await sb.from("giveaways").select("*").eq("id",id).single();
- if(!g)return;
- const req=Array.isArray(g.requirements)?g.requirements:[];
- document.getElementById("modalContent").innerHTML=
- '<form class="form" id="entryForm">'+
- '<div class="eyebrow">'+(lang==="tr"?"ÇEKİLİŞE KATIL":"ENTER GIVEAWAY")+'</div>'+
- '<h2>'+esc(g.title)+'</h2><div class="sub">'+esc(g.description)+'</div>'+
- (req.length?'<div class="field"><label>'+(lang==="tr"?"Şartlar":"Requirements")+'</label><ul class="reqs">'+req.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':"")+
- '<div class="field"><label>'+(lang==="tr"?"Minecraft Nick":"Minecraft Username")+'</label><input id="nick" maxlength="32" required placeholder="Your exact in-game name"></div>'+
- '<div class="field"><label>'+(lang==="tr"?"İletişim türü":"Contact method")+'</label><select id="ctype"><option value="discord">Discord</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option><option value="email">Email</option><option value="other">Other</option></select></div>'+
- '<div class="field"><label>'+(lang==="tr"?"İletişim bilgisi":"Contact information")+'</label><input id="contact" maxlength="200" required placeholder="@username or link"></div>'+
- '<label class="check"><input type="checkbox" id="accept" required> <span>'+(lang==="tr"?"Çekiliş şartlarını okudum ve kabul ediyorum.":"I have read and accept the giveaway requirements.")+'</span></label>'+
- '<button class="submit">'+(lang==="tr"?"KATILIMI GÖNDER":"SUBMIT ENTRY")+' →</button></form>';
- document.getElementById("modal").classList.remove("hidden");
- document.getElementById("entryForm").onsubmit=e=>submitEntry(e,g.id)
-};
-
-async function submitEntry(e,gid){
- e.preventDefault();
- const btn=e.target.querySelector("button");
- btn.disabled=true;btn.textContent=lang==="tr"?"GÖNDERİLİYOR…":"SUBMITTING…";
- const {data,error}=await sb.functions.invoke("submit-entry",{body:{
-  giveaway_id:gid,minecraft_nick:document.getElementById("nick").value,
-  contact_type:document.getElementById("ctype").value,contact_value:document.getElementById("contact").value,
-  device_id:deviceId,accepted_requirements:document.getElementById("accept").checked
- }});
- if(error||data?.error){
-  let detail=data?.error||error?.message||"Request failed";
-  try{if(error?.context?.json){const body=await error.context.json();detail=body?.error||body?.message||detail}}catch{}
-  if(lang==="tr"){
-   detail=({
-    "This Minecraft username has already entered this giveaway":"Bu Minecraft nicki bu çekilişe daha önce katılmış.",
-    "This device has already entered this giveaway":"Bu cihaz bu çekilişe daha önce katılmış.",
-    "You have already entered this giveaway":"Bu çekilişe daha önce katıldın.",
-    "Giveaway is not accepting entries":"Bu çekiliş şu anda katılım kabul etmiyor.",
-    "Giveaway is outside its entry period":"Çekilişin katılım süresi dışında.",
-    "Invalid Minecraft username":"Geçersiz Minecraft nicki.",
-    "Invalid contact information":"Geçersiz iletişim bilgisi.",
-    "You must accept the giveaway requirements":"Çekiliş şartlarını kabul etmelisin."
-   }[detail]||detail)
-  }
-  document.getElementById("modalContent").insertAdjacentHTML("beforeend",'<p style="color:var(--danger);font-weight:700">'+esc(detail)+'</p>');
-  btn.disabled=false;btn.textContent=lang==="tr"?"KATILIMI GÖNDER":"SUBMIT ENTRY";return
- }
- document.getElementById("modalContent").innerHTML='<div class="success"><div class="big">✓</div><h2>'+(lang==="tr"?"Katılım alındı!":"Entry received!")+'</h2><p>'+(lang==="tr"?"Çekiliş sonucunu takip etmeyi unutma.":"Keep an eye on the giveaway for the result.")+'</p></div>';
- loadStats();
-}
-
-document.getElementById("close").onclick=()=>document.getElementById("modal").classList.add("hidden");
-document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")document.getElementById("modal").classList.add("hidden")};
-
-applyLang();
-load();
-loadStats();
+const t=k=>T[lang]?.[k]||T.en[k]||k;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const deviceId=(()=>{let x=localStorage.getItem("yg_device");if(!x){x=crypto.randomUUID()+"-"+crypto.randomUUID();localStorage.setItem("yg_device",x)}return x})();
+const fmt=d=>{if(!d)return t("invalidDate");const date=new Date(d);return Number.isNaN(date.getTime())?t("invalidDate"):new Intl.DateTimeFormat(lang==="tr"?"tr-TR":"en-US",{dateStyle:"medium"}).format(date)};
+const num=n=>Number(n||0).toLocaleString(lang==="tr"?"tr-TR":"en-US");
+const setText=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+function applyLang(){document.querySelectorAll("[data-i18n]").forEach(e=>{e.innerHTML=t(e.dataset.i18n)});setText("enBtn","EN");setText("trBtn","TR");document.getElementById("enBtn").classList.toggle("active",lang==="en");document.getElementById("trBtn").classList.toggle("active",lang==="tr");document.documentElement.lang=lang;render()}
+document.getElementById("enBtn").onclick=()=>{lang="en";localStorage.setItem("lang",lang);applyLang()};
+document.getElementById("trBtn").onclick=()=>{lang="tr";localStorage.setItem("lang",lang);applyLang()};
+async function loadStats(){try{const {data,error}=await sb.rpc("get_public_giveaway_stats");if(error||!data)throw error;setText("statEntries",num(data.total_entries));setText("statLive",num(data.active_giveaways));setText("statCompleted",num(data.completed_giveaways));setText("statWinners",num(data.total_winners))}catch(e){["statEntries","statLive","statCompleted","statWinners"].forEach(id=>setText(id,"—"));console.warn("Public stats unavailable",e)}}
+async function load(){try{const {data,error}=await sb.rpc("get_public_giveaway_feed");if(error)throw error;feed=data||{giveaways:[],recent_winners:[]};render();loadStats();openRouteIfNeeded()}catch(e){console.error("Giveaway feed unavailable",e);document.getElementById("cards").innerHTML='<div class="empty">'+(lang==="tr"?"Çekilişler şu anda yüklenemiyor. Lütfen biraz sonra tekrar dene.":"Giveaways could not be loaded. Please try again shortly.")+'</div>';}}
+function isPast(g){return g.status==="ended"||new Date(g.ends_at)<=new Date()}
+function category(g){if(["minecoins","ranks","cosmetics","other"].includes(g.category))return g.category;const s=(g.prize_name+" "+g.title).toLowerCase();if(s.includes("coin"))return"minecoins";if(s.includes("rank")||s.includes("vip"))return"ranks";if(s.includes("cosmetic")||s.includes("skin")||s.includes("trail"))return"cosmetics";return"other"}
+function countdown(iso){const ms=new Date(iso).getTime()-Date.now();if(ms<=0)return t("countdownEnded");const d=Math.floor(ms/86400000),h=Math.floor(ms%86400000/3600000),m=Math.floor(ms%3600000/60000);return (d?d+t("days")+" ":"")+h+t("hours")+" "+m+t("minutes")}
+function card(g,kind="live"){const past=kind==="past"||isPast(g),winnerList=Array.isArray(g.winners)?g.winners:[],winnerHtml=winnerList.length?winnerList.map(w=>'<span class="winner-chip">♛ '+esc(w.nick)+'</span>').join(""):'<span class="muted">'+t("unknownWinner")+'</span>';const image=g.prize_image_url?'<img loading="lazy" src="'+esc(g.prize_image_url)+'" alt="'+esc(g.prize_name)+'">':'<div class="hero-code"><span class="mini-hex">⬡</span><b>'+esc(g.prize_name)+'</b></div>';return '<article class="card '+(g.featured&&!past?"featured-card":"")+'">'+
+'<button class="card-art" type="button" data-detail="'+esc(g.slug)+'" aria-label="'+esc(t(past?"viewResult":"details")+" "+g.title)+'">'+image+'<span class="tag '+(past?"ended":"live")+'">'+(past?t("ended"):t("live"))+'</span></button>'+
+'<div class="card-body"><div class="card-kicker">'+esc(category(g).toUpperCase())+(g.featured&&!past?' <span class="feature-mark">★ '+(lang==="tr"?"ÖNE ÇIKAN":"FEATURED")+'</span>':"")+'</div><h3><button class="title-link" data-detail="'+esc(g.slug)+'">'+esc(g.title)+'</button></h3><p>'+esc(g.description||"")+'</p>'+
+'<div class="meta"><span>'+t("prize")+'<br><strong>'+esc(g.prize_name)+'</strong></span><span>'+(past?t("drawDate"):t("ends"))+'<br><strong>'+(past?fmt(g.drawn_at||g.ends_at):'<span class="countdown" data-ends="'+esc(g.ends_at)+'">'+countdown(g.ends_at)+'</span>')+'</strong></span><span>'+t("entries")+'<br><strong>'+num(g.entry_count)+'</strong></span></div>'+
+(past?'<div class="card-winner">'+winnerHtml+'</div>':'<button class="enter" data-enter="'+esc(g.id)+'">'+t("entry")+' <span>→</span></button>')+
+'<button class="share-link" data-share="'+esc(g.slug)+'">'+t("share")+'</button></div></article>'}
+function render(){const all=feed.giveaways||[],live=all.filter(g=>!isPast(g)&&g.status==="live"),past=all.filter(isPast).sort((a,b)=>new Date(b.drawn_at||b.ends_at)-new Date(a.drawn_at||a.ends_at));const featured=live.find(g=>g.featured);setText("liveCount",lang==="tr"?live.length+" aktif etkinlik":live.length+" live "+(live.length===1?"event":"events"));document.getElementById("featuredWrap").innerHTML=featured?'<div class="featured-banner"><div class="featured-copy"><span class="eyebrow">'+(lang==="tr"?"ÖNE ÇIKAN ÇEKİLİŞ":"FEATURED GIVEAWAY")+'</span><h3>'+esc(featured.title)+'</h3><p>'+esc(featured.description||"")+'</p><div class="featured-meta"><span>♛ '+esc(featured.prize_name)+'</span><span>◷ <span class="countdown" data-ends="'+esc(featured.ends_at)+'">'+countdown(featured.ends_at)+'</span></span></div><button class="enter" data-enter="'+esc(featured.id)+'">'+t("entry")+' →</button><button class="share-link" data-share="'+esc(featured.slug)+'">'+t("share")+'</button></div>'+(featured.prize_image_url?'<img loading="lazy" src="'+esc(featured.prize_image_url)+'" alt="'+esc(featured.prize_name)+'">':'<div class="featured-hex" aria-hidden="true">⬡</div>')+'</div>':"";const regular=live.filter(g=>!g.featured);document.getElementById("cards").innerHTML=regular.length?regular.map(g=>card(g)).join(""):'<div class="empty">'+t("noLive")+'</div>';const winners=(feed.recent_winners||[]).slice(0,8);document.getElementById("winnerWall").innerHTML=winners.length?winners.map((w,i)=>'<button class="winner-row" data-detail="'+esc(w.slug)+'"><span class="winner-rank">'+String(i+1).padStart(2,"0")+'</span><span class="winner-avatar">'+esc((w.nick||"?").slice(0,1).toUpperCase())+'</span><span class="winner-info"><b>'+esc(w.nick)+'</b><small>'+esc(w.prize_name||w.giveaway_title)+'</small></span><span class="winner-date">'+fmt(w.created_at)+'</span><span class="winner-arrow">↗</span></button>').join(""):'<div class="empty">'+t("noWinners")+'</div>';const filtered=past.filter(g=>activeFilter==="all"||category(g)===activeFilter);document.getElementById("pastCards").innerHTML=filtered.length?filtered.map(g=>card(g,"past")).join(""):'<div class="empty">'+t("noPast")+'</div>';document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===activeFilter));}
+document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{activeFilter=b.dataset.filter;render()}));
+document.addEventListener("click",e=>{const enter=e.target.closest("[data-enter]");if(enter){openEntry(enter.dataset.enter);return}const detail=e.target.closest("[data-detail]");if(detail){openDetails(detail.dataset.detail);return}const share=e.target.closest("[data-share]");if(share){copyShare(share.dataset.share)}});
+function shareUrl(slug){const u=new URL(location.href);u.search="";u.hash="";u.searchParams.set("giveaway",slug);return u.toString()}
+async function copyShare(slug){const url=shareUrl(slug);try{await navigator.clipboard.writeText(url);toast(t("copied"))}catch{prompt(t("copyFail"),url)}}
+function toast(s){const e=document.getElementById("toast");e.textContent=s;e.classList.add("toast-show");setTimeout(()=>e.classList.remove("toast-show"),2100)}
+function showModal(html){document.getElementById("modalContent").innerHTML=html;document.getElementById("modal").classList.remove("hidden")}
+function openDetails(slug){const g=(feed.giveaways||[]).find(x=>x.slug===slug);if(!g)return;const past=isPast(g),wins=g.winners||[];history.replaceState(null,"",shareUrl(slug));const winnerBlock=wins.length?'<div class="result-box"><div class="eyebrow">'+t("winners")+'</div>'+wins.map(w=>'<div class="result-winner"><span>♛</span><b>'+esc(w.nick)+'</b><small>#'+esc(w.position)+'</small></div>').join("")+'</div>':(past?'<div class="result-box muted">'+t("unknownWinner")+'</div>':"");const req=Array.isArray(g.requirements)?g.requirements:[];showModal('<div class="detail-modal">'+(g.prize_image_url?'<img class="detail-image" loading="lazy" src="'+esc(g.prize_image_url)+'" alt="'+esc(g.prize_name)+'">':'')+'<div class="eyebrow">'+t(past?"viewResult":"details")+' · '+esc(category(g).toUpperCase())+'</div><h2>'+esc(g.title)+'</h2><p class="detail-desc">'+esc(g.description||"")+'</p><div class="detail-stats"><div><small>'+t("prize")+'</small><b>'+esc(g.prize_name)+'</b></div><div><small>'+t("entryCount")+'</small><b>'+num(g.entry_count)+'</b></div><div><small>'+t("drawDate")+'</small><b>'+fmt(g.drawn_at||g.ends_at)+'</b></div></div>'+winnerBlock+(req.length?'<div class="detail-req"><b>'+t("requirements")+'</b><ul>'+req.map(r=>'<li>'+esc(r)+'</li>').join("")+'</ul></div>':"")+'<div class="modal-actions"><button class="enter" data-share="'+esc(g.slug)+'">'+t("share")+'</button>'+(past?"":'<button class="enter" data-enter="'+esc(g.id)+'">'+t("entry")+'</button>')+'</div></div>')}
+function openRouteIfNeeded(){const slug=new URLSearchParams(location.search).get("giveaway");if(slug&&(feed.giveaways||[]).some(g=>g.slug===slug))openDetails(slug)}
+window.addEventListener("popstate",()=>{const slug=new URLSearchParams(location.search).get("giveaway");if(slug)openDetails(slug);else document.getElementById("modal").classList.add("hidden")});
+function openEntry(id){const g=(feed.giveaways||[]).find(x=>x.id===id);if(!g)return;const req=Array.isArray(g.requirements)?g.requirements:[];showModal('<form class="form" id="entryForm"><div class="eyebrow">'+(lang==="tr"?"ÇEKİLİŞE KATIL":"ENTER GIVEAWAY")+'</div><h2>'+esc(g.title)+'</h2><div class="sub">'+esc(g.description||"")+'</div>'+(req.length?'<div class="field"><label>'+t("requirements")+'</label><ul class="reqs">'+req.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':"")+'<div class="field"><label>'+t("minecraftNick")+'</label><input id="nick" maxlength="32" required autocomplete="off" placeholder="Minecraft username"></div><div class="field"><label>'+t("contactMethod")+'</label><select id="ctype"><option value="discord">Discord</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option><option value="email">Email</option><option value="other">Other</option></select></div><div class="field"><label>'+t("contactInfo")+'</label><input id="contact" maxlength="200" required placeholder="@username or link"></div><label class="check"><input type="checkbox" id="accept" required><span>'+t("accept")+'</span></label><p class="form-note">'+t("enterOnce")+'</p><button class="submit" type="submit">'+t("submit")+' →</button><div id="entryMsg" class="form-msg"></div></form>');document.getElementById("entryForm").onsubmit=e=>submitEntry(e,g.id)}
+async function submitEntry(e,gid){e.preventDefault();const form=e.target,btn=form.querySelector("button[type=submit]");btn.disabled=true;btn.textContent=t("submitting");const {data,error}=await sb.functions.invoke("submit-entry",{body:{giveaway_id:gid,minecraft_nick:document.getElementById("nick").value.trim(),contact_type:document.getElementById("ctype").value,contact_value:document.getElementById("contact").value.trim(),device_id:deviceId,accepted_requirements:document.getElementById("accept").checked}});if(error||data?.error){let detail=data?.error||error?.message||"Request failed";try{if(error?.context?.json){const b=await error.context.json();detail=b?.error||b?.message||detail}}catch{}const trMap={"This Minecraft username has already entered this giveaway":"Bu Minecraft nicki bu çekilişe daha önce katılmış.","This device has already entered this giveaway":"Bu cihaz bu çekilişe daha önce katılmış.","You have already entered this giveaway":"Bu çekilişe daha önce katıldın.","Giveaway is not accepting entries":"Bu çekiliş şu anda katılım kabul etmiyor.","Giveaway is outside its entry period":"Çekilişin katılım süresi dışında.","Invalid Minecraft username":"Geçersiz Minecraft nicki.","Invalid contact information":"Geçersiz iletişim bilgisi.","You must accept the giveaway requirements":"Çekiliş şartlarını kabul etmelisin."};if(lang==="tr")detail=trMap[detail]||detail;document.getElementById("entryMsg").textContent=detail;document.getElementById("entryMsg").className="form-msg error";btn.disabled=false;btn.textContent=t("submit")+" →";return}showModal('<div class="success"><div class="big">✓</div><h2>'+t("entryReceived")+'</h2><p>'+t("entrySuccess")+'</p><button class="enter" id="successClose">'+t("close")+'</button></div>');document.getElementById("successClose").onclick=()=>document.getElementById("modal").classList.add("hidden");await load()}
+document.getElementById("close").onclick=()=>{document.getElementById("modal").classList.add("hidden");if(new URLSearchParams(location.search).has("giveaway"))history.replaceState(null,"",location.pathname+location.hash)};
+document.getElementById("modal").onclick=e=>{if(e.target.id==="modal"){document.getElementById("modal").classList.add("hidden");if(new URLSearchParams(location.search).has("giveaway"))history.replaceState(null,"",location.pathname+location.hash)}};
+setInterval(()=>{document.querySelectorAll(".countdown[data-ends]").forEach(e=>e.textContent=countdown(e.dataset.ends))},30000);
+applyLang();load();
