@@ -1,1 +1,32 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hive Giveaways</title><meta name="description" content="Official giveaway hub for Minecraft Bedrock players."><link rel="stylesheet" href="style.css"></head><body><header><a class="brand" href="./">HIVE<span>GIVEAWAYS</span></a><nav><a href="#giveaways">Giveaways</a><a href="#how">How it works</a><button id="lang">TR</button></nav></header><main><section class="hero"><div><p class="eyebrow">MINECRAFT BEDROCK GIVEAWAYS</p><h1>WIN. PLAY. <b>REPEAT.</b></h1><p>Enter community giveaways with your Minecraft username and one contact method.</p><a class="cta" href="#giveaways">View giveaways</a></div><div class="pixel-card"><span>THE HIVE</span><strong>GIVEAWAY</strong><small>BEDROCK EDITION</small></div></section><section id="giveaways"><div class="section-head"><div><p class="eyebrow">LIVE EVENTS</p><h2>Active giveaways</h2></div><span id="count"></span></div><div id="list" class="grid"><div class="loading">Loading giveaways…</div></div></section><section id="how" class="how"><h2>How it works</h2><div class="steps"><div><b>01</b><h3>Choose</h3><p>Pick an active giveaway.</p></div><div><b>02</b><h3>Enter</h3><p>Use your Minecraft nick and contact details.</p></div><div><b>03</b><h3>Wait</h3><p>Winners are selected when the event ends.</p></div></div></section></main><footer><span>Hive Giveaways</span><span>Community project · Not affiliated with The Hive</span></footer><dialog id="dlg"><form method="dialog" id="entry"><button class="close">×</button><p class="eyebrow">ENTER GIVEAWAY</p><h2 id="dlgTitle"></h2><p id="dlgPrize"></p><input type="hidden" id="gid"><label>Minecraft username<input id="nick" maxlength="32" required autocomplete="off"></label><label>Contact method<select id="ctype"><option value="discord">Discord</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option><option value="email">Email</option><option value="other">Other</option></select></label><label>Contact information<input id="cvalue" maxlength="200" required></label><label class="check"><input type="checkbox" id="accept" required><span>I accept the giveaway requirements shown above.</span></label><button class="cta" type="submit">ENTER NOW</button><p id="msg"></p></form></dialog><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Minecraft Bedrock giveaways by Yazmiyor.">
+<title>YAZMIYOR • The Hive Giveaways</title>
+<link rel="icon" href="assets/prize-1.png">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
+<div class="bg-grid"></div>
+<header class="nav"><a class="brand" href="#"><span class="cube">◆</span> YAZMIYOR <b>GIVEAWAYS</b></a>
+<nav><a href="#giveaways" data-i18n="navGiveaways">Giveaways</a><a href="#how" data-i18n="navHow">How it works</a><a href="admin.html" class="admin-link">Admin</a></nav>
+<div class="lang"><button id="enBtn">EN</button><button id="trBtn">TR</button></div></header>
+<main>
+<section class="hero"><div class="hero-copy"><div class="eyebrow">MINECRAFT BEDROCK • COMMUNITY EVENTS</div>
+<h1 data-i18n="heroTitle">ENTER. PLAY. <span>WIN.</span></h1>
+<p data-i18n="heroText">Official-style community giveaways for Minecraft Bedrock players. One nickname, one entry.</p>
+<a class="cta" href="#giveaways" data-i18n="heroCta">VIEW GIVEAWAYS <span>→</span></a></div>
+<div class="hero-card"><div class="scan"></div><div class="hero-badge">BEDROCK</div><div class="hero-code">HIVE<br><strong>GIVEAWAY</strong></div></div></section>
+<section id="giveaways" class="section"><div class="section-head"><div><div class="eyebrow">LIVE EVENTS</div><h2 data-i18n="liveTitle">Active Giveaways</h2></div><div id="count" class="count">—</div></div>
+<div id="cards" class="cards"><div class="loading">Loading giveaways…</div></div></section>
+<section id="how" class="section how"><div class="eyebrow">SIMPLE BY DESIGN</div><h2 data-i18n="howTitle">How it works</h2><div class="steps">
+<div><b>01</b><h3 data-i18n="step1h">Choose a giveaway</h3><p data-i18n="step1p">Pick an active event and read its requirements.</p></div>
+<div><b>02</b><h3 data-i18n="step2h">Enter your nickname</h3><p data-i18n="step2p">Use your exact Minecraft Bedrock in-game name and leave one way to contact you.</p></div>
+<div><b>03</b><h3 data-i18n="step3h">Wait for the draw</h3><p data-i18n="step3p">When the event ends, eligible entries are drawn and the winner is announced.</p></div>
+</div></section>
+</main>
+<footer><span>© 2026 Yazmiyor</span><span><a href="https://www.youtube.com/@IamNotYazmiyor" target="_blank" rel="noopener">YouTube</a></span></footer>
+<div id="modal" class="modal hidden"><div class="modal-box"><button class="close" id="close">×</button><div id="modalContent"></div></div></div>
+<div id="toast"></div>
+<script src="app.js"></script>
+</body></html>
