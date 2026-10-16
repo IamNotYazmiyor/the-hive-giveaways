@@ -19,7 +19,7 @@ const adminTextMap={
  "Enter your email and password.":"E-posta ve şifreni gir.",
  "SIGNING IN…":"GİRİŞ YAPILIYOR…","Admin access verified":"Yönetici girişi doğrulandı",
  "Sign in failed.":"Giriş başarısız.","Login succeeded but no access token was returned.":"Giriş yapıldı ancak erişim anahtarı alınamadı.",
- "Invalid login credentials":"E-posta veya şifre hatalı."
+ "Invalid login credentials":"E-posta veya şifre hatalı.","Admin access required":"Yönetici erişimi gerekli. Supabase admins tablosundaki kullanıcı yetkisini kontrol et.","permission denied for table admins":"admins tablosuna erişim reddedildi. Yönetici kontrolünü Edge Function üzerinden yap; tabloya herkese açık izin verme.","invalid input syntax for type uuid: \"undefined\"":"Kayıt kimliği alınamadı. Sayfayı yenileyip tekrar dene.","Server error":"Sunucu hatası. Supabase Edge Function günlüklerini kontrol et.","Invalid or expired session":"Oturumun süresi dolmuş. Yeniden giriş yap."
 };
 function localizeAdminText(value){
  if(adminLang!=="tr"||!value)return value;
@@ -28,6 +28,9 @@ function localizeAdminText(value){
  if(value.startsWith("Draw "))return value.replace(/^Draw (\d+) winner\(s\) from (\d+) valid entries\? This cannot be undone\.$/,"$1 kazananı $2 geçerli katılım arasından belirlemek istiyor musun? Bu işlem geri alınamaz.");
  if(value.startsWith("Invalid login"))return "E-posta veya şifre hatalı.";
  if(value.startsWith("Email rate limit"))return "E-posta deneme sınırına ulaşıldı. Bir süre sonra tekrar dene.";
+ if(value.toLowerCase().includes("permission denied for table admins"))return "Yönetici doğrulaması için veritabanı izni eksik. Güvenli yönetici kontrolü yapılandırılmalı.";
+ if(value.toLowerCase().includes("invalid input syntax for type uuid"))return "Geçersiz kayıt kimliği. Sayfayı yenileyip tekrar dene.";
+ if(value.includes("Edge Function returned a non-2xx status code"))return "Sunucu işlemi reddetti. Hata ayrıntısı alınamadı; Supabase günlükleri kontrol edilmeli.";
  return value;
 }
 const msg=(text,ok=false,id="msg")=>{const e=$(id);if(e){e.className="msg "+(ok?"ok":"err");e.textContent=localizeAdminText(text||"")}};
