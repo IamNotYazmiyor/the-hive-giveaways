@@ -317,3 +317,104 @@ footer{border-top:1px solid #ffffff12;background:#080b13;padding-top:28px;paddin
 .winner-row:nth-child(2){animation-delay:.035s}.winner-row:nth-child(3){animation-delay:.07s}.winner-row:nth-child(4){animation-delay:.105s}
 .winner-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid #75e2b02a}
 @media(prefers-reduced-motion:reduce){.winner-row{animation:none}}
+
+/* October polish: quieter Hive-inspired UI, consistent controls, no heavy effects */
+:root{
+  --bg:#0b0e12;
+  --panel:#12171d;
+  --panel2:#171e25;
+  --line:#29323b;
+  --text:#f4f6f7;
+  --muted:#a1acb5;
+  --accent:#f6c94b;
+  --accent2:#ffe08a;
+  --green:#75dca0;
+}
+body{background:var(--bg);color:var(--text)}
+.bg-grid{opacity:.055;background-size:52px 52px}
+.hive-glow{opacity:.045;filter:blur(150px)}
+.nav{background:#0b0e12eF;border-bottom-color:#ffffff12}
+.brand{letter-spacing:.65px}
+.hive-mark i{background:var(--accent)}
+.nav nav a{transition:color .16s ease}
+.admin-link{border-radius:8px;padding:8px 12px}
+.lang button{border-radius:6px;padding:7px 8px}
+.hero{gap:clamp(30px,4vw,58px)}
+.hero h1{text-shadow:none;letter-spacing:-1px}
+.hero p{font-size:16px;max-width:520px}
+.cta{clip-path:none;border-radius:9px;padding:13px 17px;gap:18px;transition:background .16s ease,transform .16s ease}
+.cta:hover{transform:translateY(-1px);filter:none;background:var(--accent2)}
+.ghost-cta{border-radius:9px;padding:12px 16px;transition:border-color .16s ease,color .16s ease}
+.hive-visual{border-radius:18px;background:radial-gradient(ellipse at 72% 38%,#f6c94b12 0,transparent 42%),linear-gradient(145deg,#171e25,#0e1217 72%);box-shadow:0 18px 44px #0003;border-color:#ffffff14}
+.hive-visual:before{opacity:.45}
+.hex-cluster{opacity:.68}
+.hex{background:#252e36}
+.hex.h1,.hex.h6,.hex.h11{background:#f6c94b}
+.visual-title{font-size:clamp(62px,6vw,78px);letter-spacing:0}
+.stats-strip{grid-template-columns:repeat(4,minmax(0,1fr));gap:0;background:#0e1318;border:1px solid #ffffff12;border-radius:14px;overflow:hidden}
+.stat-item{min-height:88px;padding:17px 20px;border-right:1px solid #ffffff10;border-bottom:0;gap:12px}
+.stat-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:11px;background:#f6c94b12;color:var(--accent)}
+.stat-icon svg{width:20px;height:20px}
+.stat-item strong{font-size:28px}
+.stat-item div span{letter-spacing:1px}
+.section{padding-top:88px;padding-bottom:88px}
+.section-head{border-bottom-color:#ffffff12}
+.section h2{font-size:clamp(44px,5vw,56px);letter-spacing:-.3px}
+.section-sub{color:var(--muted);font-size:13px;line-height:1.6;margin:10px 0 0}
+.cards{gap:18px}
+.card{border-radius:15px;border-color:#ffffff12;box-shadow:0 12px 32px #0002;transition:transform .18s ease,border-color .18s ease}
+.card:hover{transform:translateY(-3px);border-color:#f6c94b55}
+.card-art{border:0;background:#171e25}
+.card-body{padding:20px}
+.card h3{font-size:29px;line-height:1.08}
+.card p{min-height:0;margin-top:8px}
+.meta{border-top-color:#ffffff12}
+.enter,.submit{border-radius:9px;background:var(--accent);color:#18160f;padding:13px 15px;transition:background .16s ease,transform .16s ease,box-shadow .16s ease}
+.enter:hover,.submit:hover{filter:none;background:var(--accent2);transform:translateY(-1px);box-shadow:0 5px 15px #f6c94b18}
+.share-link,.text-link,.detail-link{border:0;background:transparent;color:#c0c9d0;font-size:11px;font-weight:800;cursor:pointer;transition:color .16s ease}
+.share-link:hover,.text-link:hover,.detail-link:hover{color:var(--accent)}
+.featured-banner{border-radius:16px;border-color:#ffffff14;background:linear-gradient(125deg,#171e25,#10151a)}
+.featured-copy{padding:clamp(22px,3vw,34px)}
+.featured-banner>img{object-fit:cover}
+.featured-art-placeholder{background:radial-gradient(circle at 50% 38%,#f6c94b18,transparent 48%),#10151a}
+.featured-art-placeholder span{filter:none}
+.featured-meta{color:#b6c0c7}
+.winner-row{border-radius:10px}
+.filter{border-radius:8px;background:#141a20;border-color:#ffffff12;color:#b8c2c9}
+.filter.active{background:var(--accent);color:#18160f;box-shadow:none}
+.past-grid .card{border-radius:14px}
+.how .steps>div{border-radius:14px;background:#12171d;border-color:#ffffff12}
+.how .steps>div:hover{transform:translateY(-2px);border-color:#f6c94b44}
+.how .steps>div:after{display:none}
+.how .steps>div>b{border-radius:9px;background:#f6c94b12}
+.final-cta{border-radius:16px;border-color:#ffffff12;background:radial-gradient(ellipse at 82% 0%,#f6c94b0b,transparent 42%),#11171d}
+.final-cta h2 span{background:none;color:var(--accent)}
+footer{background:#090c10;border-top-color:#ffffff12}
+footer a{color:#b8c2c9}
+footer a:hover{color:var(--accent)}
+.modal{background:#05080bd9}
+.modal-box{border-radius:16px;background:#121820;border-color:#ffffff18;box-shadow:0 24px 70px #0008}
+.form input,.form select{border-radius:9px;background:#0b1015;border-color:#303b45}
+.form input:focus,.form select:focus{border-color:#f6c94b88;outline:2px solid #f6c94b12}
+#toast{border-radius:10px;background:#1b242c;color:#f4f6f7}
+.empty,.loading{border-radius:12px;border-color:#ffffff18;background:#ffffff02}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:900px){
+  .stats-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;border:0;background:transparent;overflow:visible}
+  .stat-item{border:1px solid #ffffff12;border-radius:12px;background:#0e1318;padding:13px}
+  .stat-item:nth-child(2){border-right:1px solid #ffffff12}
+  .section{padding-top:66px;padding-bottom:66px}
+}
+@media(max-width:600px){
+  .hero h1{letter-spacing:-.6px}
+  .hive-visual{border-radius:15px;box-shadow:0 14px 34px #0003}
+  .hex-cluster{opacity:.6}
+  .stat-item{min-height:74px}
+  .section{padding-top:54px;padding-bottom:54px}
+  .card-body{padding:17px}
+  .featured-banner{border-radius:14px}
+  .final-cta{padding:22px;border-radius:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
