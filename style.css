@@ -14,3 +14,29 @@ footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:w
 @media(max-width:1000px){.nav{gap:14px}.brand{font-size:20px}.nav nav{gap:14px}.hero{gap:25px}.hero h1{font-size:77px}.hive-visual{height:375px}.cards,.past-grid{grid-template-columns:repeat(2,1fr)}.stat-item{padding:12px;gap:8px}.stat-icon{width:34px;height:34px;flex-basis:34px}.stat-item strong{font-size:29px}}
 @media(max-width:700px){.nav{flex-wrap:wrap;justify-content:space-between;padding:10px 16px}.nav nav{order:3;width:100%;justify-content:center;gap:16px;margin:0;overflow-x:auto}.nav nav a{font-size:11px}.brand{font-size:21px}main{padding:0 18px}.hero{grid-template-columns:1fr;padding:40px 0 45px;gap:30px}.hero h1{font-size:clamp(67px,14vw,90px)}.hero p{font-size:14px}.hive-visual{height:320px;box-shadow:6px 6px 0 #07141c}.visual-title{font-size:65px}.pixel-chest{transform:rotate(-7deg) scale(.75);right:17%;top:90px}.stats-strip{grid-template-columns:repeat(2,1fr);gap:10px}.stat-item{min-height:83px}.section{padding:58px 0 18px}.section-head{align-items:flex-start}.section h2{font-size:48px}.cards,.past-grid,.how .steps{grid-template-columns:1fr}.featured-banner{grid-template-columns:1fr}.featured-banner>img,.featured-art-placeholder{min-height:190px;max-height:240px}.final-cta{margin:55px 0;padding:23px;flex-direction:column;align-items:flex-start}.detail-stats{grid-template-columns:1fr 1fr}footer{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+
+
+/* Hive-inspired finishing pass: restrained gold, charcoal and stone; lightweight motion. */
+:root{--accent:#ffcc52;--accent-soft:#f0b92f;--panel:#11161c;--line:#27313b;--muted:#a2adb8}
+body{background:#090b0e}
+.bg-grid{opacity:.34}
+.brand b,.eyebrow,.visual-label span,.visual-foot span:last-child{color:var(--accent)}
+.cta,.enter,.submit,.winner-celebration-close{background:var(--accent);border-color:var(--accent);color:#111}
+.cta:hover,.enter:hover,.submit:hover,.winner-celebration-close:hover{background:#ffda78;transform:translateY(-1px)}
+.ghost-cta,.admin-link{border-color:#303945}
+.hero h1 span{background:none!important;-webkit-text-fill-color:var(--accent)!important;color:var(--accent)!important}
+.hive-visual{background:linear-gradient(145deg,#171d25,#0e1218 72%);border:1px solid #303945;border-radius:8px;box-shadow:8px 8px 0 #0e131a}
+.hive-visual:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,#ffcc5208,transparent 55%);z-index:1}
+.world-art{filter:saturate(.82)}
+.pixel-star{color:#ffcc52}
+.floating-island{filter:drop-shadow(0 8px 10px #0005)}
+.stat-item{background:linear-gradient(145deg,#151b24,#10151c);border-color:#27313b;border-radius:8px;transition:border-color .18s ease,transform .18s ease}
+.stat-item:hover{transform:translateY(-2px);border-color:#80652c}
+.stat-icon{border-radius:7px}
+.card,.featured-banner,.winner-row,.past-grid .card{border-radius:7px}
+.card:hover,.past-grid .card:hover{transform:translateY(-3px);border-color:#66532b}
+.filter,.cta,.ghost-cta,.admin-link,.enter,.submit,.a-btn{transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+.nav{backdrop-filter:blur(12px)}
+.lang button.active{background:var(--accent);color:#111}
+@media(max-width:700px){.nav{gap:8px}.brand{font-size:17px}.lang{margin-left:auto}.lang button{min-width:34px;padding:7px 8px}.nav nav{gap:12px}.hive-visual{height:280px}.pixel-chest{transform:rotate(-7deg) scale(.68)}}
+@media(prefers-reduced-motion:reduce){.stat-item,.card,.cta,.ghost-cta,.admin-link,.enter,.submit,.a-btn{transition:none!important}}
