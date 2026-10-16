@@ -1,6 +1,7 @@
 const SUPABASE_URL="https://adgfwvqndgwdllnjtbcc.supabase.co";
 const SUPABASE_KEY="sb_publishable_ZgCi1NpFMv9KcDGdZlEfdg_0aHBMs7J";
 let accessToken=sessionStorage.getItem("hive_admin_access");
+let adminLang=localStorage.getItem("admin_lang")||"tr";
 let state={giveaways:[],entries:[],winners:[]};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -59,12 +60,38 @@ async function saveGiveaway(ev){
 async function archive(id){if(!confirm("Archive this giveaway? It will disappear from the public site."))return;try{await api("archive",{id});await load();toast("Giveaway archived")}catch(e){toast(e.message)}}
 async function draw(id){const g=state.giveaways.find(x=>x.id===id);if(!g)return;const n=state.entries.filter(e=>e.giveaway_id===id&&e.status==="valid").length;if(!n)return toast("There are no valid entries.");if(!confirm('Draw '+g.winner_count+' winner(s) from '+n+' valid entries? This cannot be undone.'))return;try{const winners=await api("draw",{id});await load();toast("Winner draw completed")}catch(e){toast(e.message)}}
 async function entryStatus(id,status){const reason=status==="disqualified"?(prompt("Reason for disqualification:")||"Admin action"):null;try{await api("entry_status",{id,status,reason});await load();toast(status==="valid"?"Entry restored":"Entry disqualified")}catch(e){toast(e.message)}}
+function applyAdminLanguage(){
+ const tr=adminLang==="tr",set=(q,v)=>document.querySelectorAll(q).forEach(e=>e.textContent=v);
+ const q=(id,v)=>{const e=$(id);if(e)e.textContent=v};
+ q("enBtn","EN");q("trBtn","TR");q("newBtn",tr?"+ ÇEKİLİŞ OLUŞTUR":"+ NEW GIVEAWAY");q("refreshBtn",tr?"YENİLE":"REFRESH");q("logoutBtn",tr?"ÇIKIŞ YAP":"LOG OUT");q("loginBtn",tr?"GİRİŞ YAP →":"SIGN IN →");
+ const x=document.querySelector("#loginBox .eyebrow");if(x)x.textContent=tr?"ÖZEL YÖNETİCİ ALANI":"PRIVATE ADMIN AREA";
+ const h=document.querySelector("#loginBox h1");if(h)h.textContent=tr?"YÖNETİCİ GİRİŞİ":"ADMIN LOGIN";
+ const p=document.querySelector("#loginBox .muted");if(p)p.textContent=tr?"Yetkili hesapla giriş yap.":"Sign in with an authorized account.";
+ const ls=document.querySelectorAll("#loginBox .field label");if(ls[0])ls[0].textContent=tr?"E-posta":"Email";if(ls[1])ls[1].textContent=tr?"Şifre":"Password";
+ const ae=document.querySelector(".admin-title .eyebrow");if(ae)ae.textContent=tr?"KONTROL MERKEZİ":"CONTROL CENTER";const ah=document.querySelector(".admin-title h1");if(ah)ah.textContent=tr?"ÇEKİLİŞ YÖNETİMİ":"GIVEAWAY ADMIN";const ap=document.querySelector(".admin-title p");if(ap)ap.textContent=tr?"Çekilişleri oluştur, katılımları yönet ve kazananları belirle.":"Create events, manage entries and draw winners.";
+ const sl=document.querySelectorAll(".stat small"),sv=tr?["TOPLAM ÇEKİLİŞ","AKTİF","TOPLAM KATILIM","KAZANANLAR"]:["TOTAL GIVEAWAYS","LIVE","TOTAL ENTRIES","WINNERS"];sl.forEach((e,i)=>e.textContent=sv[i]);
+ const ph=document.querySelectorAll(".panel-box h2");if(ph[0])ph[0].textContent=tr?"Çekilişler":"Giveaways";if(ph[1])ph[1].textContent=tr?"Son kazananlar":"Latest winners";if(ph[2])ph[2].textContent=tr?"Katılımlar":"Entries";
+ const th=document.querySelectorAll(".admin-table thead th"),tv=tr?["Çekiliş","Durum","Zaman","Katılım","İşlemler","Nick","İletişim","Çekiliş","Durum","Oluşturuldu","İşlemler"]:["Giveaway","Status","Schedule","Entries","Actions","Nick","Contact","Giveaway","Status","Created","Actions"];th.forEach((e,i)=>{if(tv[i])e.textContent=tv[i]});
+ set(".edit",tr?"DÜZENLE":"EDIT");set(".draw",tr?"KAZANAN BELİRLE":"DRAW");set(".archive",tr?"ARŞİVLE":"ARCHIVE");set(".dq",tr?"ELE":"DISQUALIFY");set(".valid",tr?"GERİ YÜKLE":"RESTORE");
+ const sm={draft:tr?"taslak":"draft",live:tr?"aktif":"live",ended:tr?"bitti":"ended",cancelled:tr?"iptal":"cancelled",valid:tr?"geçerli":"valid",disqualified:tr?"elenmiş":"disqualified"};document.querySelectorAll(".pill").forEach(e=>{const k=e.textContent.trim();if(sm[k])e.textContent=sm[k]});
+ document.querySelectorAll(".empty-state").forEach(e=>{if(e.closest("#winners"))e.textContent=tr?"Henüz kazanan belirlenmedi.":"No winners drawn yet.";else if(e.closest("#erow"))e.textContent=tr?"Henüz katılım yok.":"No entries yet.";else e.textContent=tr?"Henüz çekiliş yok. İlk çekilişini oluştur.":"No giveaways yet. Create your first event."});
+ const nb=document.querySelector(".nav nav a");if(nb)nb.textContent=tr?"Siteyi Gör":"View site";
+ document.getElementById("enBtn")?.classList.toggle("active",!tr);document.getElementById("trBtn")?.classList.toggle("active",tr);
+ if($("modal")&&!$("modal").classList.contains("hidden"))applyEditorLanguage();
+}
+function applyEditorLanguage(){
+ const tr=adminLang==="tr",m=$("modalTitle");if(m)m.textContent=$("gid").value?(tr?"Çekilişi düzenle":"Edit giveaway"):(tr?"Yeni çekiliş":"New giveaway");
+ const e=document.querySelector("#modal .eyebrow");if(e)e.textContent=tr?"ÇEKİLİŞ DÜZENLEYİCİ":"GIVEAWAY EDITOR";
+ const labels=document.querySelectorAll("#giveawayForm .field>label"),v=tr?["Başlık","Ödül adı","Kısa ad","Kazanan sayısı","Açıklama","Ödül görseli URL'si (isteğe bağlı)","Başlangıç","Bitiş","Durum","Görünürlük","Katılım şartları"]:["Title","Prize name","Slug","Winner count","Description","Prize image URL (optional)","Starts","Ends","Status","Visibility","Requirements"];labels.forEach((e,i)=>{if(v[i])e.textContent=v[i]});
+ const pub=document.querySelector("#published")?.parentElement;if(pub)pub.lastChild.textContent=" "+(tr?"Web sitesinde yayınla":"Publish on website");if($("addReq"))$("addReq").textContent=tr?"+ Şart ekle":"+ Add requirement";if($("cancelForm"))$("cancelForm").textContent=tr?"İPTAL":"CANCEL";const save=document.querySelector('#giveawayForm button[type="submit"]');if(save)save.textContent=tr?"ÇEKİLİŞİ KAYDET":"SAVE GIVEAWAY";document.querySelectorAll(".req-input").forEach(e=>e.placeholder=tr?"Örnek: @IamNotYazmiyor YouTube kanalını takip et":"Example: Follow @IamNotYazmiyor on YouTube");
+ const st=$("status");if(st){const a=tr?["Taslak","Aktif","Bitti","İptal"]:["Draft","Live","Ended","Cancelled"];[...st.options].forEach((o,i)=>o.textContent=a[i]||o.textContent)}
+}
 document.addEventListener("DOMContentLoaded",()=>{
  $("loginBtn").onclick=loginNow;$("password").onkeydown=e=>{if(e.key==="Enter")loginNow()};
  $("logoutBtn").onclick=()=>{accessToken=null;sessionStorage.removeItem("hive_admin_access");location.reload()};
  $("newBtn").onclick=()=>openEditor();$("refreshBtn").onclick=()=>load();$("modalClose").onclick=closeEditor;$("cancelForm").onclick=closeEditor;$("addReq").onclick=()=>addReqRow();$("giveawayForm").onsubmit=saveGiveaway;
  $("title").oninput=()=>{if(!$("gid").value&&!$("slug").dataset.touched)$("slug").value=slugify($("title").value)};$("slug").oninput=()=>{$("slug").dataset.touched="1"};
  document.addEventListener("click",e=>{const id=e.target.dataset.id;if(!id)return;if(e.target.classList.contains("edit"))openEditor(state.giveaways.find(g=>g.id===id));if(e.target.classList.contains("archive"))archive(id);if(e.target.classList.contains("draw"))draw(id);if(e.target.classList.contains("dq"))entryStatus(id,"disqualified");if(e.target.classList.contains("valid"))entryStatus(id,"valid")});
- $("enBtn").onclick=()=>{localStorage.setItem("lang","en")};$("trBtn").onclick=()=>{localStorage.setItem("lang","tr")};
- if(accessToken)load();
+ $("enBtn").onclick=()=>{adminLang="en";localStorage.setItem("admin_lang","en");applyAdminLanguage();render()};$("trBtn").onclick=()=>{adminLang="tr";localStorage.setItem("admin_lang","tr");applyAdminLanguage();render()};
+ applyAdminLanguage();if(accessToken)load();
 });
