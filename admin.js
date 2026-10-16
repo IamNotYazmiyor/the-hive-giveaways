@@ -35,6 +35,8 @@ function render(){
  $("erow").innerHTML=es.map(e=>{const g=gs.find(x=>x.id===e.giveaway_id);return '<tr><td><b>'+esc(e.minecraft_nick)+'</b></td><td>'+esc(e.contact_type)+': '+esc(e.contact_value)+'</td><td>'+esc(g?.title||e.giveaway_id)+'</td><td><span class="pill '+(e.status==="valid"?"live":"disqualified")+'">'+esc(e.status)+'</span>'+(e.disqualify_reason?'<br><small class="muted">'+esc(e.disqualify_reason)+'</small>':'')+'</td><td>'+new Date(e.created_at).toLocaleString()+'</td><td><div class="row-actions">'+(e.status==="valid"?'<button class="a-btn danger dq" data-id="'+e.id+'">DISQUALIFY</button>':'<button class="a-btn valid" data-id="'+e.id+'">RESTORE</button>')+'</div></td></tr>'}).join("")||'<tr><td colspan="6" class="empty-state">No entries yet.</td></tr>';
  const latest=ws.slice(0,12);$("winners").innerHTML=latest.map(w=>{const e=es.find(x=>x.id===w.entry_id),g=gs.find(x=>x.id===w.giveaway_id);return '<div class="winner"><b>#'+w.position+' '+esc(e?.minecraft_nick||"Unknown")+'</b><br><span class="muted">'+esc(g?.title||"Giveaway")+'</span></div>'}).join("")||'<div class="empty-state">No winners drawn yet.</div>';
 }
+ applyAdminLanguage();
+}
 async function load(){
  try{const d=await api("list");state={giveaways:d?.giveaways||[],entries:d?.entries||[],winners:d?.winners||[]};$("loginBox").classList.add("hidden");$("panel").classList.remove("hidden");render()}
  catch(e){if(/session|expired|authentication/i.test(e.message)){accessToken=null;sessionStorage.removeItem("hive_admin_access");$("panel").classList.add("hidden");$("loginBox").classList.remove("hidden")}msg(e.message)}
@@ -92,6 +94,6 @@ document.addEventListener("DOMContentLoaded",()=>{
  $("newBtn").onclick=()=>openEditor();$("refreshBtn").onclick=()=>load();$("modalClose").onclick=closeEditor;$("cancelForm").onclick=closeEditor;$("addReq").onclick=()=>addReqRow();$("giveawayForm").onsubmit=saveGiveaway;
  $("title").oninput=()=>{if(!$("gid").value&&!$("slug").dataset.touched)$("slug").value=slugify($("title").value)};$("slug").oninput=()=>{$("slug").dataset.touched="1"};
  document.addEventListener("click",e=>{const id=e.target.dataset.id;if(!id)return;if(e.target.classList.contains("edit"))openEditor(state.giveaways.find(g=>g.id===id));if(e.target.classList.contains("archive"))archive(id);if(e.target.classList.contains("draw"))draw(id);if(e.target.classList.contains("dq"))entryStatus(id,"disqualified");if(e.target.classList.contains("valid"))entryStatus(id,"valid")});
- $("enBtn").onclick=()=>{adminLang="en";localStorage.setItem("admin_lang","en");render()};$("trBtn").onclick=()=>{adminLang="tr";localStorage.setItem("admin_lang","tr");render()};
- applyAdminLanguage();applyAdminLanguage();if(accessToken)load();
+ $("enBtn").onclick=()=>{adminLang="en";localStorage.setItem("admin_lang","en");applyAdminLanguage();render()};$("trBtn").onclick=()=>{adminLang="tr";localStorage.setItem("admin_lang","tr");applyAdminLanguage();render()};
+ applyAdminLanguage();if(accessToken)load();
 });
