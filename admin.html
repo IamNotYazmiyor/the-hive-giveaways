@@ -25,6 +25,8 @@
 <form id="giveawayForm"><input id="gid" type="hidden"><div class="form-grid">
 <div class="field"><label>Title</label><input id="title" required maxlength="120"></div><div class="field"><label>Prize name</label><input id="prize" required maxlength="120"></div>
 <div class="field"><label>Slug</label><input id="slug" required maxlength="100" placeholder="hive-3500-minecoins"></div><div class="field"><label>Winner count</label><input id="winnerCount" type="number" min="1" max="50" value="1" required></div>
+<div class="field"><label>Category</label><select id="category"><option value="minecoins">Minecoins</option><option value="ranks">Ranks</option><option value="cosmetics">Cosmetics</option><option value="other" selected>Other</option></select></div>
+<div class="field"><label>Featured giveaway</label><label class="checkline"><input id="featured" type="checkbox"> Highlight on the homepage</label></div>
 <div class="field full"><label>Description</label><textarea id="description"></textarea></div>
 <div class="field full"><label>Prize image URL (optional)</label><input id="imageUrl" type="url" placeholder="https://..."></div>
 <div class="field"><label>Starts</label><input id="starts" type="datetime-local" required></div><div class="field"><label>Ends</label><input id="ends" type="datetime-local" required></div>
@@ -32,5 +34,5 @@
 <div class="field"><label>Visibility</label><label class="checkline"><input id="published" type="checkbox"> Publish on website</label></div>
 <div class="field full"><label>Requirements</label><div id="reqList" class="req-list"></div><button type="button" id="addReq" class="a-btn" style="margin-top:8px">+ Add requirement</button></div>
 </div><div id="formMsg" class="msg"></div><div class="admin-actions" style="justify-content:flex-end;margin-top:10px"><button type="button" id="cancelForm" class="a-btn">CANCEL</button><button type="submit" class="a-btn primary">SAVE GIVEAWAY</button></div></form></div></div>
-<script src="admin.js?v=12"></script>
+<script src="admin.js?v=13"></script>
 </body></html>
