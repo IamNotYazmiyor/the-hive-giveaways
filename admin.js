@@ -49,9 +49,26 @@ function openEditor(g=null){
  $("description").value=g?.description||"";$("imageUrl").value=g?.prize_image_url||"";
  $("starts").value=isoLocal(g?.starts_at||new Date());$("ends").value=isoLocal(g?.ends_at||new Date(Date.now()+7*86400000));
  $("status").value=g?.status||"draft";$("published").checked=!!g?.published;$("winnerCount").value=g?.winner_count||1;$("category").value=g?.category||"other";$("featured").checked=!!g?.featured;
- reqRows(Array.isArray(g?.requirements)?g.requirements:[]);msg("","","formMsg");$("modal").classList.remove("hidden");
+ reqRows(Array.isArray(g?.requirements)?g.requirements:[]);msg("","","formMsg");$("modal").classList.remove("hidden");refreshImagePreview();
 }
 function closeEditor(){$("modal").classList.add("hidden")}
+function refreshImagePreview(){
+ const wrap=$("imagePreviewWrap"),img=$("imagePreview"),label=$("imagePreviewLabel"),raw=$("imageUrl")?.value.trim()||"";
+ if(!wrap||!img||!label)return;
+ wrap.classList.add("hidden");wrap.classList.remove("image-error");img.removeAttribute("src");
+ if(!raw)return;
+ let u;try{u=new URL(raw);if(!["http:","https:"].includes(u.protocol))throw new Error("Invalid protocol")}catch{wrap.classList.remove("hidden");wrap.classList.add("image-error");label.textContent=adminLang==="tr"?"Geçerli bir http(s) görsel bağlantısı gir.":"Enter a valid http(s) image URL.";return}
+ wrap.classList.remove("hidden");label.textContent=adminLang==="tr"?"Görsel önizlemesi yükleniyor…":"Loading image preview…";
+ img.onload=()=>{wrap.classList.remove("image-error");label.textContent=adminLang==="tr"?"Ödül görseli önizlemesi":"Prize image preview"};
+ img.onerror=()=>{wrap.classList.add("image-error");label.textContent=adminLang==="tr"?"Görsel yüklenemedi; bağlantıyı kontrol et.":"Image could not load; check the URL."};
+ img.src=u.href;
+}
+function showWinnerCelebration(g,result){
+ const rows=Array.isArray(result)?result:(Array.isArray(result?.winners)?result.winners:Array.isArray(result?.data?.winners)?result.data.winners:[]);
+ const markup=rows.length?rows.map((w,i)=>{const entry=state.entries.find(e=>e.id===w.entry_id);const nick=w.minecraft_nick||w.nick||w.username||entry?.minecraft_nick||"Winner";const position=w.position||w.rank||i+1;return '<div class="winner-celebration-person"><strong>♛ '+esc(nick)+'</strong><span>'+(adminLang==="tr"?"Kazanan #":"Winner #")+esc(position)+'</span></div>'}).join(""):'<p>'+(adminLang==="tr"?"Kazananlar başarıyla kaydedildi. Sonuçlar herkese açık sitede yayınlanacak.":"Winners were saved successfully. Results will appear on the public site.")+'</p>';
+ const overlay=document.createElement("div");overlay.className="winner-celebration";overlay.setAttribute("role","dialog");overlay.setAttribute("aria-modal","true");overlay.innerHTML='<div class="winner-celebration-card"><div class="winner-celebration-icon">🏆</div><div class="eyebrow">'+(adminLang==="tr"?"ÇEKİLİŞ SONUCU":"GIVEAWAY RESULTS")+'</div><h2>'+(adminLang==="tr"?"Kazananlar belli oldu!":"We have our winners!")+'</h2><p>'+esc(g.title)+'</p><div class="winner-celebration-list">'+markup+'</div><button type="button" class="winner-celebration-close">'+(adminLang==="tr"?"TAMAM":"DONE")+'</button></div>';
+ const close=()=>overlay.remove();overlay.querySelector("button").onclick=close;overlay.addEventListener("click",e=>{if(e.target===overlay)close()});document.addEventListener("keydown",function onKey(e){if(e.key==="Escape"){close();document.removeEventListener("keydown",onKey)}});document.body.appendChild(overlay);
+}
 function render(){
  const gs=state.giveaways||[], es=state.entries||[], ws=state.winners||[];
  $("gnum").textContent=gs.length;$("liveNum").textContent=gs.filter(g=>g.status==="live"&&g.published).length;$("enum").textContent=es.length;$("wNum").textContent=ws.length;
@@ -84,7 +101,15 @@ async function saveGiveaway(ev){
  catch(e){msg(e.message,false,"formMsg")}finally{button.disabled=false}
 }
 async function archive(id){if(!confirm(adminLang==="tr"?"Bu çekiliş arşivlensin mi? Herkese açık siteden kaldırılacak.":"Archive this giveaway? It will disappear from the public site."))return;try{await api("archive",{id});await load();toast("Giveaway archived")}catch(e){toast(e.message)}}
-async function draw(id){const g=state.giveaways.find(x=>x.id===id);if(!g)return;const n=state.entries.filter(e=>e.giveaway_id===id&&e.status==="valid").length;if(!n)return toast("There are no valid entries.");if(!confirm(adminLang==="tr"?n+" geçerli katılım arasından "+g.winner_count+" kazanan belirlensin mi? Bu işlem geri alınamaz.":"Draw "+g.winner_count+" winner(s) from "+n+" valid entries? This cannot be undone."))return;try{const winners=await api("draw",{id});await load();toast("Winner draw completed")}catch(e){toast(e.message)}}
+async function draw(id){
+ const g=state.giveaways.find(x=>x.id===id);if(!g)return;
+ const n=state.entries.filter(e=>e.giveaway_id===id&&e.status==="valid").length;
+ if(!n)return toast("There are no valid entries.");
+ const confirmText=adminLang==="tr"?n+" geçerli katılım arasından "+g.winner_count+" kazanan belirlensin mi? Bu işlem geri alınamaz.":"Draw "+g.winner_count+" winner(s) from "+n+" valid entries? This cannot be undone.";
+ if(!confirm(confirmText))return;
+ try{const result=await api("draw",{id});await load();showWinnerCelebration(g,result);toast(adminLang==="tr"?"Kazananlar belirlendi":"Winner draw completed")}
+ catch(e){toast(e.message)}
+}
 async function entryStatus(id,status){const reason=status==="disqualified"?(prompt(adminLang==="tr"?"Elenme nedenini yazın:":"Reason for disqualification:")||(adminLang==="tr"?"Yönetici işlemi":"Admin action")):null;try{await api("entry_status",{id,status,reason});await load();toast(status==="valid"?"Entry restored":"Entry disqualified")}catch(e){toast(e.message)}}
 function applyAdminLanguage(){
  const tr=adminLang==="tr",set=(q,v)=>document.querySelectorAll(q).forEach(e=>e.textContent=v);
@@ -116,7 +141,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  $("loginBtn").onclick=loginNow;$("password").onkeydown=e=>{if(e.key==="Enter")loginNow()};
  $("logoutBtn").onclick=()=>{accessToken=null;sessionStorage.removeItem("hive_admin_access");location.reload()};
  $("newBtn").onclick=()=>openEditor();$("refreshBtn").onclick=()=>load();$("modalClose").onclick=closeEditor;$("cancelForm").onclick=closeEditor;$("addReq").onclick=()=>addReqRow();$("giveawayForm").onsubmit=saveGiveaway;
- $("title").oninput=()=>{if(!$("gid").value&&!$("slug").dataset.touched)$("slug").value=slugify($("title").value)};$("slug").oninput=()=>{$("slug").dataset.touched="1"};
+ $("title").oninput=()=>{if(!$("gid").value&&!$("slug").dataset.touched)$("slug").value=slugify($("title").value)};$("imageUrl").oninput=refreshImagePreview;$("slug").oninput=()=>{$("slug").dataset.touched="1"};
  document.addEventListener("click",e=>{const id=e.target.dataset.id;if(!id)return;if(e.target.classList.contains("edit"))openEditor(state.giveaways.find(g=>g.id===id));if(e.target.classList.contains("archive"))archive(id);if(e.target.classList.contains("draw"))draw(id);if(e.target.classList.contains("dq"))entryStatus(id,"disqualified");if(e.target.classList.contains("valid"))entryStatus(id,"valid")});
  $("enBtn").onclick=()=>{adminLang="en";localStorage.setItem("admin_lang","en");applyAdminLanguage();render()};$("trBtn").onclick=()=>{adminLang="tr";localStorage.setItem("admin_lang","tr");applyAdminLanguage();render()};
  applyAdminLanguage();if(accessToken)load();
