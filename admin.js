@@ -23,7 +23,7 @@ function openEditor(g=null){
  $("title").value=g?.title||"";$("prize").value=g?.prize_name||"";$("slug").value=g?.slug||"";
  $("description").value=g?.description||"";$("imageUrl").value=g?.prize_image_url||"";
  $("starts").value=isoLocal(g?.starts_at||new Date());$("ends").value=isoLocal(g?.ends_at||new Date(Date.now()+7*86400000));
- $("status").value=g?.status||"draft";$("published").checked=!!g?.published;$("winnerCount").value=g?.winner_count||1;
+ $("status").value=g?.status||"draft";$("published").checked=!!g?.published;$("winnerCount").value=g?.winner_count||1;$("category").value=g?.category||"other";$("featured").checked=!!g?.featured;
  reqRows(Array.isArray(g?.requirements)?g.requirements:[]);msg("","","formMsg");$("modal").classList.remove("hidden");
 }
 function closeEditor(){$("modal").classList.add("hidden")}
@@ -51,7 +51,7 @@ async function loginNow(){
  }catch(e){accessToken=null;sessionStorage.removeItem("hive_admin_access");msg(e.message||"Sign in failed.")}finally{b.disabled=false;b.textContent="SIGN IN →"}
 }
 async function saveGiveaway(ev){
- ev.preventDefault();const id=$("gid").value;const payload={title:$("title").value.trim(),prize_name:$("prize").value.trim(),slug:$("slug").value.trim()||slugify($("title").value),description:$("description").value.trim(),prize_image_url:$("imageUrl").value.trim(),starts_at:new Date($("starts").value).toISOString(),ends_at:new Date($("ends").value).toISOString(),published:$("published").checked,status:$("status").value,winner_count:Number($("winnerCount").value||1),requirements:[...document.querySelectorAll(".req-input")].map(x=>x.value.trim()).filter(Boolean)};
+ ev.preventDefault();const id=$("gid").value;const payload={title:$("title").value.trim(),prize_name:$("prize").value.trim(),slug:$("slug").value.trim()||slugify($("title").value),description:$("description").value.trim(),prize_image_url:$("imageUrl").value.trim(),starts_at:new Date($("starts").value).toISOString(),ends_at:new Date($("ends").value).toISOString(),published:$("published").checked,status:$("status").value,winner_count:Number($("winnerCount").value||1),category:$("category").value,featured:$("featured").checked,requirements:[...document.querySelectorAll(".req-input")].map(x=>x.value.trim()).filter(Boolean)};
  if(!payload.title||!payload.prize_name){msg("Title and prize are required.");return}
  if(new Date(payload.ends_at)<=new Date(payload.starts_at)){msg("End time must be after start time.");return}
  const button=ev.target.querySelector('button[type="submit"]');button.disabled=true;msg("Saving…",true,"formMsg");
@@ -84,7 +84,7 @@ function applyEditorLanguage(){
  const tr=adminLang==="tr",m=$("modalTitle");if(m)m.textContent=$("gid").value?(tr?"Çekilişi düzenle":"Edit giveaway"):(tr?"Yeni çekiliş":"New giveaway");
  const e=document.querySelector("#modal .eyebrow");if(e)e.textContent=tr?"ÇEKİLİŞ DÜZENLEYİCİ":"GIVEAWAY EDITOR";
  const labels=document.querySelectorAll("#giveawayForm .field>label"),v=tr?["Başlık","Ödül adı","Kısa ad","Kazanan sayısı","Açıklama","Ödül görseli URL'si (isteğe bağlı)","Başlangıç","Bitiş","Durum","Görünürlük","Katılım şartları"]:["Title","Prize name","Slug","Winner count","Description","Prize image URL (optional)","Starts","Ends","Status","Visibility","Requirements"];labels.forEach((e,i)=>{if(v[i])e.textContent=v[i]});
- const pub=document.querySelector("#published")?.parentElement;if(pub)pub.lastChild.textContent=" "+(tr?"Web sitesinde yayınla":"Publish on website");if($("addReq"))$("addReq").textContent=tr?"+ Şart ekle":"+ Add requirement";if($("cancelForm"))$("cancelForm").textContent=tr?"İPTAL":"CANCEL";const save=document.querySelector('#giveawayForm button[type="submit"]');if(save)save.textContent=tr?"ÇEKİLİŞİ KAYDET":"SAVE GIVEAWAY";document.querySelectorAll(".req-input").forEach(e=>e.placeholder=tr?"Örnek: @IamNotYazmiyor YouTube kanalını takip et":"Example: Follow @IamNotYazmiyor on YouTube");
+ const pub=document.querySelector("#published")?.parentElement;if(pub)pub.lastChild.textContent=" "+(tr?"Web sitesinde yayınla":"Publish on website");const feat=document.querySelector("#featured")?.parentElement;if(feat)feat.lastChild.textContent=" "+(tr?"Ana sayfada öne çıkar":"Highlight on the homepage");const cat=$("category");if(cat){const labels=tr?["Minecoins","Rütbeler","Kozmetikler","Diğer"]:["Minecoins","Ranks","Cosmetics","Other"];[...cat.options].forEach((o,i)=>o.textContent=labels[i]||o.textContent)}if($("addReq"))$("addReq").textContent=tr?"+ Şart ekle":"+ Add requirement";if($("cancelForm"))$("cancelForm").textContent=tr?"İPTAL":"CANCEL";const save=document.querySelector('#giveawayForm button[type="submit"]');if(save)save.textContent=tr?"ÇEKİLİŞİ KAYDET":"SAVE GIVEAWAY";document.querySelectorAll(".req-input").forEach(e=>e.placeholder=tr?"Örnek: @IamNotYazmiyor YouTube kanalını takip et":"Example: Follow @IamNotYazmiyor on YouTube");
  const st=$("status");if(st){const a=tr?["Taslak","Aktif","Bitti","İptal"]:["Draft","Live","Ended","Cancelled"];[...st.options].forEach((o,i)=>o.textContent=a[i]||o.textContent)}
 }
 document.addEventListener("DOMContentLoaded",()=>{
