@@ -1,0 +1,14 @@
+THE HIVE GIVEAWAYS — GITHUB WEB UPLOAD
+
+Bu paket bilerek TEK KLASÖRDE / DÜZ DOSYA YAPISINDA hazırlandı. GitHub'a klasör yüklemek zorunda değilsin.
+
+1) ZIP'i bilgisayarında aç.
+2) İçindeki tüm dosyaları seç (Ctrl+A).
+3) GitHub deposunu aç: https://github.com/IamNotYazmiyor/the-hive-giveaways
+4) Add file > Upload files seç.
+5) Seçtiğin dosyaları sürükle. Bu paketteki .html, .css, .js, görseller, fontlar ve supabase-2.118.0.js aynı dizine konmalı.
+6) Commit changes ile kaydet.
+
+ÖNEMLİ: CNAME dosyası lostlegend.net.tr içermeli; mevcut özel domaini korumak için silme. Bu ZIP'teki CNAME de aynı değeri korur. GitHub'da aynı isimli dosya varsa paketteki yeni sürümle değiştirilir.
+
+Görsel ve font yolları klasörsüz düzene göre değiştirildi. CSS/JS cache sürümü de güncellendi.

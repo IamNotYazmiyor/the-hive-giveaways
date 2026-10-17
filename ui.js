@@ -45,7 +45,7 @@ export function paintIcons(root = document) { root.querySelectorAll('[data-icon]
 export function safeImage(value) { try { const u = new URL(value, location.href); return u.protocol === 'https:' || (u.origin === location.origin && u.protocol === 'http:') ? u.href : ''; } catch { return ''; } }
 export function prizeImage(g) {
   if (g.prize_image_url && safeImage(g.prize_image_url)) return safeImage(g.prize_image_url);
-  if (/season\s*5|sezon\s*5/i.test(`${g.title} ${g.prize_name}`)) return './assets/season5-ticket.jpg';
+  if (/season\s*5|sezon\s*5/i.test(`${g.title} ${g.prize_name}`)) return './season5-ticket.jpg';
   return '';
 }
 export function prizeArt(g, cls = '', eager = false) {
